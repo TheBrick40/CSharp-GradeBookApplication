@@ -14,27 +14,21 @@ namespace GradeBook.GradeBooks
         }
         public override char GetLetterGrade(double averageGrade)
         {
-            var studentCount = Students.Count;
-            if (studentCount < 5)
+            if (Students.Count < 5)
             {
                 throw new System.InvalidOperationException("5 or greater students are required.");
             }
 
-            var studentRange = studentCount * .20;
+            var threshold = (int)Math.Ceiling(Students.Count * .20);
+            var grades = Students.OrderByDescending(e => e.AverageGrade).Select(e => e.AverageGrade).ToList();
 
-            var studentList = Students;
-
-            studentList.Sort();
-
-
-
-            if (averageGrade >= 90)
+            if (grades[threshold - 1] <= averageGrade)
                 return 'A';
-            else if (averageGrade >= 80)
+            else if (grades[threshold * 2 - 1] <= averageGrade)
                 return 'B';
-            else if (averageGrade >= 70)
+            else if (grades[threshold * 3 - 1] <= averageGrade)
                 return 'C';
-            else if (averageGrade >= 60)
+            else if (grades[threshold * 4 - 1] <= averageGrade)
                 return 'D';
             else
                 return 'F';
